@@ -1,63 +1,66 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
-import { getLinkStats, type LinkStats } from '../api'
-import { useDebouncedCallback } from '../hooks/useDebouncedCallback'
-import BarList from './BarList'
-import VisitsTable from './VisitsTable'
-import shared from '../styles/shared.module.css'
-import styles from './StatsView.module.css'
+import { useState, useEffect, useRef, useCallback } from "react";
+import { getLinkStats, type LinkStats } from "../api";
+import { useDebouncedCallback } from "../hooks/useDebouncedCallback";
+import BarList from "./BarList";
+import VisitsTable from "./VisitsTable";
+import shared from "../styles/shared.module.css";
+import styles from "./StatsView.module.css";
 
-const LOOKUP_DEBOUNCE_MS = 300
+const LOOKUP_DEBOUNCE_MS = 5000;
 
 interface Props {
-  initialCode?: string
+  initialCode?: string;
 }
 
-export default function StatsView({ initialCode = '' }: Props) {
-  const [code, setCode] = useState(initialCode)
-  const [stats, setStats] = useState<LinkStats | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const abortControllerRef = useRef<AbortController | null>(null)
+export default function StatsView({ initialCode = "" }: Props) {
+  const [code, setCode] = useState(initialCode);
+  const [stats, setStats] = useState<LinkStats | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const fetchStats = useCallback(async (shortCode: string) => {
-    abortControllerRef.current?.abort()
-    const controller = new AbortController()
-    abortControllerRef.current = controller
-    const { signal } = controller
+    abortControllerRef.current?.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+    const { signal } = controller;
 
-    setLoading(true)
-    setError(null)
-    setStats(null)
+    setLoading(true);
+    setError(null);
+    setStats(null);
 
     try {
-      const data = await getLinkStats(shortCode, signal)
-      if (!signal.aborted) setStats(data)
+      const data = await getLinkStats(shortCode, signal);
+      if (!signal.aborted) setStats(data);
     } catch (err) {
-      if (!signal.aborted && (err as Error).name !== 'AbortError') {
-        setError(err instanceof Error ? err.message : 'Something went wrong')
+      if (!signal.aborted && (err as Error).name !== "AbortError") {
+        setError(err instanceof Error ? err.message : "Something went wrong");
       }
     } finally {
-      if (!signal.aborted) setLoading(false)
+      if (!signal.aborted) setLoading(false);
     }
-  }, [])
+  }, []);
 
-  const debouncedFetchStats = useDebouncedCallback(fetchStats, LOOKUP_DEBOUNCE_MS)
-
-  useEffect(() => {
-    if (!initialCode) return
-    setCode(initialCode)
-    fetchStats(initialCode)
-  }, [initialCode, fetchStats])
+  const debouncedFetchStats = useDebouncedCallback(
+    fetchStats,
+    LOOKUP_DEBOUNCE_MS,
+  );
 
   useEffect(() => {
-    return () => abortControllerRef.current?.abort()
-  }, [])
+    if (!initialCode) return;
+    setCode(initialCode);
+    fetchStats(initialCode);
+  }, [initialCode, fetchStats]);
+
+  useEffect(() => {
+    return () => abortControllerRef.current?.abort();
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    const trimmed = code.trim()
-    if (trimmed) debouncedFetchStats(trimmed)
-  }
+    e.preventDefault();
+    const trimmed = code.trim();
+    if (trimmed) debouncedFetchStats(trimmed);
+  };
 
   const countryItems = stats
     ? Object.entries(stats.clicks_by_country)
@@ -65,14 +68,16 @@ export default function StatsView({ initialCode = '' }: Props) {
         .map(([country, count]) => ({
           label: country,
           count,
-          pct: stats.total_clicks ? Math.round((count / stats.total_clicks) * 100) : 0,
+          pct: stats.total_clicks
+            ? Math.round((count / stats.total_clicks) * 100)
+            : 0,
           showPct: true,
         }))
-    : []
+    : [];
 
   const maxDateCount = stats
     ? Math.max(...Object.values(stats.clicks_by_date), 1)
-    : 1
+    : 1;
 
   const dateItems = stats
     ? Object.entries(stats.clicks_by_date)
@@ -82,7 +87,7 @@ export default function StatsView({ initialCode = '' }: Props) {
           count,
           pct: Math.round((count / maxDateCount) * 100),
         }))
-    : []
+    : [];
 
   return (
     <section className={shared.panel}>
@@ -101,7 +106,7 @@ export default function StatsView({ initialCode = '' }: Props) {
           disabled={loading || !code.trim()}
           className={shared.btnPrimary}
         >
-          {loading ? 'Loading...' : 'Look up'}
+          {loading ? "Loading..." : "Look up"}
         </button>
       </form>
 
@@ -111,13 +116,13 @@ export default function StatsView({ initialCode = '' }: Props) {
         <div className={styles.card}>
           <div className={styles.header}>
             <div>
-              <h2 className={styles.title}>{stats.title || 'Untitled'}</h2>
+              <h2 className={styles.title}>{stats.title || "Untitled"}</h2>
               <span className={shared.code}>{stats.short_code}</span>
             </div>
             <div className={styles.total}>
               <span className={styles.totalNumber}>{stats.total_clicks}</span>
               <span className={styles.totalLabel}>
-                {stats.total_clicks === 1 ? 'click' : 'clicks'}
+                {stats.total_clicks === 1 ? "click" : "clicks"}
               </span>
             </div>
           </div>
@@ -147,5 +152,5 @@ export default function StatsView({ initialCode = '' }: Props) {
         </div>
       )}
     </section>
-  )
+  );
 }

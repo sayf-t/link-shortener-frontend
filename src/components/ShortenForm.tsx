@@ -18,7 +18,7 @@ export interface HistoryEntry {
 
 const TITLE_POLL_INTERVAL_MS = 1500;
 const TITLE_POLL_MAX_ATTEMPTS = 6;
-const SUBMIT_DEBOUNCE_MS = 300;
+const SUBMIT_DEBOUNCE_MS = 3000;
 const HISTORY_STORAGE_KEY = "link-shortener-history";
 const HISTORY_MAX_ENTRIES = 50;
 
