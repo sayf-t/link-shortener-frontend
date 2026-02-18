@@ -40,8 +40,14 @@ export async function createShortLink(targetUrl: string): Promise<CreateLinkResp
   return response.json()
 }
 
-export async function getLinkStats(shortCode: string): Promise<LinkStats> {
-  const response = await fetch(`${API_BASE_URL}/api/v1/links/${encodeURIComponent(shortCode)}/stats`)
+export async function getLinkStats(
+  shortCode: string,
+  signal?: AbortSignal,
+): Promise<LinkStats> {
+  const response = await fetch(
+    `${API_BASE_URL}/api/v1/links/${encodeURIComponent(shortCode)}/stats`,
+    { signal },
+  )
 
   if (!response.ok) {
     throw new Error(response.status === 404 ? 'Link not found' : 'Failed to fetch stats')

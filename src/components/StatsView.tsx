@@ -1,9 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { getLinkStats, type LinkStats } from '../api'
+import { useDebouncedCallback } from '../hooks/useDebouncedCallback'
 import BarList from './BarList'
 import VisitsTable from './VisitsTable'
 import shared from '../styles/shared.module.css'
 import styles from './StatsView.module.css'
+
+const LOOKUP_DEBOUNCE_MS = 300
 
 interface Props {
   initialCode?: string
@@ -14,29 +17,46 @@ export default function StatsView({ initialCode = '' }: Props) {
   const [stats, setStats] = useState<LinkStats | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const abortControllerRef = useRef<AbortController | null>(null)
+
+  const fetchStats = useCallback(async (shortCode: string) => {
+    abortControllerRef.current?.abort()
+    const controller = new AbortController()
+    abortControllerRef.current = controller
+    const { signal } = controller
+
+    setLoading(true)
+    setError(null)
+    setStats(null)
+
+    try {
+      const data = await getLinkStats(shortCode, signal)
+      if (!signal.aborted) setStats(data)
+    } catch (err) {
+      if (!signal.aborted && (err as Error).name !== 'AbortError') {
+        setError(err instanceof Error ? err.message : 'Something went wrong')
+      }
+    } finally {
+      if (!signal.aborted) setLoading(false)
+    }
+  }, [])
+
+  const debouncedFetchStats = useDebouncedCallback(fetchStats, LOOKUP_DEBOUNCE_MS)
 
   useEffect(() => {
     if (!initialCode) return
     setCode(initialCode)
     fetchStats(initialCode)
-  }, [initialCode])
+  }, [initialCode, fetchStats])
 
-  const fetchStats = async (shortCode: string) => {
-    setLoading(true)
-    setError(null)
-    setStats(null)
-    try {
-      setStats(await getLinkStats(shortCode))
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong')
-    } finally {
-      setLoading(false)
-    }
-  }
+  useEffect(() => {
+    return () => abortControllerRef.current?.abort()
+  }, [])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (code.trim()) fetchStats(code.trim())
+    const trimmed = code.trim()
+    if (trimmed) debouncedFetchStats(trimmed)
   }
 
   const countryItems = stats
