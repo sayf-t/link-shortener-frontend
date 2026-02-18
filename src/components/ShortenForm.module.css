@@ -61,6 +61,26 @@
   color: var(--text-muted);
 }
 
+.titleRetryRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.retryButton {
+  background: transparent;
+  border: 0;
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-family: inherit;
+  padding: 0;
+  cursor: pointer;
+}
+
+.retryButton:hover {
+  text-decoration: underline;
+}
+
 .targetUrl {
   margin: 0 0 0.75rem;
   font-size: 0.8rem;

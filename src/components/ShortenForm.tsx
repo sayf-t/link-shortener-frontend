@@ -17,6 +17,7 @@ export default function ShortenForm({ onViewStats }: Props) {
   const [error, setError] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
   const [titleLoading, setTitleLoading] = useState(false)
+  const [titleLookupRetryToken, setTitleLookupRetryToken] = useState(0)
 
   useEffect(() => {
     const shortCode = result?.short_code
@@ -64,7 +65,7 @@ export default function ShortenForm({ onViewStats }: Props) {
       cancelled = true
       if (timeoutId) window.clearTimeout(timeoutId)
     }
-  }, [result?.short_code, result?.title])
+  }, [result?.short_code, result?.title, titleLookupRetryToken])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -73,6 +74,7 @@ export default function ShortenForm({ onViewStats }: Props) {
     setLoading(true)
     setError(null)
     setResult(null)
+    setTitleLookupRetryToken(0)
     try {
       const link = await createShortLink(targetUrl.trim())
       setResult(link)
@@ -137,7 +139,16 @@ export default function ShortenForm({ onViewStats }: Props) {
                 <span>Fetching title...</span>
               </div>
             ) : (
-              <p className={styles.pageTitleFallback}>Title unavailable</p>
+              <div className={styles.titleRetryRow}>
+                <p className={styles.pageTitleFallback}>Title not ready yet.</p>
+                <button
+                  type="button"
+                  className={styles.retryButton}
+                  onClick={() => setTitleLookupRetryToken((value) => value + 1)}
+                >
+                  Retry lookup
+                </button>
+              </div>
             )}
           </div>
 
