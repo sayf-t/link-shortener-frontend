@@ -1,0 +1,119 @@
+.panel {
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Form row ───────────────────────────────────────── */
+
+.form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.urlInput {
+  flex: 1;
+  padding: 0.7rem 0.9rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.urlInput::placeholder {
+  color: var(--text-muted);
+}
+
+.urlInput:focus {
+  border-color: var(--accent);
+}
+
+.urlInput:disabled {
+  opacity: 0.5;
+}
+
+/* ── Buttons ────────────────────────────────────────── */
+
+.btn {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: var(--radius);
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnPrimary {
+  composes: btn;
+  padding: 0.7rem 1.25rem;
+  background: var(--accent);
+  color: #fff;
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.btnCopy {
+  composes: btn;
+  padding: 0.4rem 0.75rem;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.8rem;
+  border-radius: 6px;
+}
+
+.btnCopy:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btnGhost {
+  composes: btn;
+  padding: 0.5rem 0;
+  color: var(--accent);
+  font-size: 0.85rem;
+}
+
+.btnGhost:hover {
+  text-decoration: underline;
+}
+
+/* ── Alerts ─────────────────────────────────────────── */
+
+.alertError {
+  padding: 0.65rem 0.9rem;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  background: var(--error-bg);
+  color: var(--error);
+}
+
+/* ── Code badge ─────────────────────────────────────── */
+
+.code {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.8rem;
+  background: var(--bg-elevated);
+  padding: 0.2rem 0.5rem;
+  border-radius: 5px;
+  color: var(--text-muted);
+}
