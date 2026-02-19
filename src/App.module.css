@@ -45,6 +45,11 @@
   color: var(--text);
 }
 
+.tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .tabActive {
   composes: tab;
   color: var(--accent);
