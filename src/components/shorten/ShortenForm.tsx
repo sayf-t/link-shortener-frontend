@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
-import { createShortLink, getLinkStats } from '../../api'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   SUBMIT_DEBOUNCE_MS,
   TITLE_POLL_INTERVAL_MS,
@@ -7,7 +6,10 @@ import {
   DEFAULT_ERROR_MESSAGE,
 } from '../../constants'
 import { useDebouncedCallback } from '../../hooks/useDebouncedCallback'
-import { loadHistory, saveHistory } from '../../lib/linkHistory'
+import type { LinksPort } from '../../ports/links.port'
+import type { LinkHistoryPort } from '../../ports/link-history.port'
+import { createLinkShortenerApiAdapter } from '../../adapters/link-shortener-api.adapter'
+import { createLocalStorageHistoryAdapter } from '../../adapters/local-storage-history.adapter'
 import type { CreateLinkResponse, HistoryEntry } from '../../types/links'
 import ResultCard from './ResultCard'
 import HistoryAccordion from './HistoryAccordion'
@@ -15,9 +17,14 @@ import shared from '../../styles/shared.module.css'
 
 interface Props {
   onViewStats: (shortCode: string) => void
+  linksPort?: LinksPort
+  historyPort?: LinkHistoryPort
 }
 
-export default function ShortenForm({ onViewStats }: Props) {
+export default function ShortenForm({ onViewStats, linksPort, historyPort }: Props) {
+  const links = useMemo(() => linksPort ?? createLinkShortenerApiAdapter(), [linksPort])
+  const history_ = useMemo(() => historyPort ?? createLocalStorageHistoryAdapter(), [historyPort])
+
   const [targetUrl, setTargetUrl] = useState('')
   const [result, setResult] = useState<CreateLinkResponse | null>(null)
   const [loading, setLoading] = useState(false)
@@ -26,7 +33,7 @@ export default function ShortenForm({ onViewStats }: Props) {
   const [copiedCode, setCopiedCode] = useState<string | null>(null)
   const [titleLoading, setTitleLoading] = useState(false)
   const [titleLookupRetryToken, setTitleLookupRetryToken] = useState(0)
-  const [history, setHistory] = useState<HistoryEntry[]>(loadHistory)
+  const [history, setHistory] = useState<HistoryEntry[]>(() => history_.load())
   const [accordionOpen, setAccordionOpen] = useState(false)
 
   useEffect(() => {
@@ -44,7 +51,7 @@ export default function ShortenForm({ onViewStats }: Props) {
       attempts += 1
 
       try {
-        const stats = await getLinkStats(shortCode)
+        const stats = await links.getLinkStats(shortCode)
         if (cancelled) return
 
         if (stats.title) {
@@ -75,7 +82,7 @@ export default function ShortenForm({ onViewStats }: Props) {
       cancelled = true
       if (timeoutId) window.clearTimeout(timeoutId)
     }
-  }, [result?.short_code, result?.title, titleLookupRetryToken])
+  }, [result?.short_code, result?.title, titleLookupRetryToken, links])
 
   const submitUrl = useCallback(async (url: string) => {
     setLoading(true)
@@ -83,7 +90,7 @@ export default function ShortenForm({ onViewStats }: Props) {
     setResult(null)
     setTitleLookupRetryToken(0)
     try {
-      const link = await createShortLink(url)
+      const link = await links.createShortLink(url)
       setResult(link)
       setTargetUrl('')
       const entry: HistoryEntry = {
@@ -95,7 +102,7 @@ export default function ShortenForm({ onViewStats }: Props) {
       }
       setHistory((prev) => {
         const next = [entry, ...prev.filter((e) => e.short_code !== link.short_code)]
-        saveHistory(next)
+        history_.save(next)
         return next
       })
       setAccordionOpen(true)
@@ -104,7 +111,7 @@ export default function ShortenForm({ onViewStats }: Props) {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [links, history_])
 
   const debouncedSubmit = useDebouncedCallback(
     (url: string) => void submitUrl(url),

@@ -146,6 +146,16 @@ export default function DadJokeEasterEgg({
                   Trending GIF
                 </button>
               </div>
+              <p className={styles.giphyAttribution}>
+                <a
+                  href="https://icanhazdadjoke.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.giphyLink}
+                >
+                  Jokes from icanhazdadjoke.com
+                </a>
+              </p>
             </>
           )}
           {imageOpen && (

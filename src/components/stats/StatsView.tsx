@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
-import { getLinkStats } from '../../api'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { LOOKUP_DEBOUNCE_MS, DEFAULT_ERROR_MESSAGE } from '../../constants'
 import { useDebouncedCallback } from '../../hooks/useDebouncedCallback'
+import type { LinksPort } from '../../ports/links.port'
+import { createLinkShortenerApiAdapter } from '../../adapters/link-shortener-api.adapter'
 import type { LinkStats } from '../../types/links'
 import BarList from './BarList'
 import VisitsTable from './VisitsTable'
@@ -10,9 +11,11 @@ import styles from './StatsView.module.css'
 
 interface Props {
   initialCode?: string
+  linksPort?: LinksPort
 }
 
-export default function StatsView({ initialCode = '' }: Props) {
+export default function StatsView({ initialCode = '', linksPort }: Props) {
+  const links = useMemo(() => linksPort ?? createLinkShortenerApiAdapter(), [linksPort])
   const [code, setCode] = useState(initialCode)
   const [stats, setStats] = useState<LinkStats | null>(null)
   const [loading, setLoading] = useState(false)
@@ -30,7 +33,7 @@ export default function StatsView({ initialCode = '' }: Props) {
     setStats(null)
 
     try {
-      const data = await getLinkStats(shortCode, signal)
+      const data = await links.getLinkStats(shortCode, signal)
       if (!signal.aborted) setStats(data)
     } catch (err) {
       if (!signal.aborted && (err as Error).name !== 'AbortError') {
@@ -39,7 +42,7 @@ export default function StatsView({ initialCode = '' }: Props) {
     } finally {
       if (!signal.aborted) setLoading(false)
     }
-  }, [])
+  }, [links])
 
   const debouncedFetchStats = useDebouncedCallback(fetchStats, LOOKUP_DEBOUNCE_MS)
 
