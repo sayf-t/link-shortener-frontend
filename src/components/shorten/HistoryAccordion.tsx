@@ -34,7 +34,9 @@ export default function HistoryAccordion({
         <span className={styles.accordionTitle}>Your shortened links</span>
         <span className={styles.accordionCount}>{history.length}</span>
         <span
-          className={open ? styles.accordionChevronOpen : styles.accordionChevron}
+          className={
+            open ? styles.accordionChevronOpen : styles.accordionChevron
+          }
           aria-hidden
         >
           ▼
@@ -48,9 +50,16 @@ export default function HistoryAccordion({
       >
         <ul className={styles.historyList}>
           {history.map((entry) => (
-            <li key={`${entry.short_code}-${entry.created_at}`} className={styles.historyItem}>
+            <li
+              key={`${entry.short_code}-${entry.created_at}`}
+              className={styles.historyItem}
+            >
               <div className={styles.historyShortUrl}>
-                <a href={entry.short_url} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={entry.short_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {entry.short_url}
                 </a>
                 <button
@@ -61,7 +70,9 @@ export default function HistoryAccordion({
                   {copiedCode === entry.short_code ? 'Copied!' : 'Copy'}
                 </button>
               </div>
-              {entry.title && <p className={styles.historyTitle}>{entry.title}</p>}
+              {entry.title && (
+                <p className={styles.historyTitle}>{entry.title}</p>
+              )}
               <p className={styles.historyTarget}>{entry.target_url}</p>
               <button
                 type="button"

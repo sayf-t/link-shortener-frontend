@@ -13,7 +13,9 @@
   border: none;
   cursor: pointer;
   padding: 0;
-  transition: background 0.2s, transform 0.15s;
+  transition:
+    background 0.2s,
+    transform 0.15s;
 }
 
 .trigger:hover {
@@ -61,7 +63,9 @@
   line-height: 1;
   cursor: pointer;
   border-radius: 4px;
-  transition: color 0.15s, background 0.15s;
+  transition:
+    color 0.15s,
+    background 0.15s;
 }
 
 .close:hover {

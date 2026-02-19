@@ -12,7 +12,11 @@
   --error-bg: rgba(248, 113, 113, 0.1);
   --radius: 10px;
 
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family:
+    'Inter',
+    system-ui,
+    -apple-system,
+    sans-serif;
   line-height: 1.6;
   font-weight: 400;
   color: var(--text);

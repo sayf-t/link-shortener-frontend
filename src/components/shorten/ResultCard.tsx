@@ -25,7 +25,10 @@ export default function ResultCard({
         <a href={result.short_url} target="_blank" rel="noopener noreferrer">
           {result.short_url}
         </a>
-        <button onClick={() => onCopy(result.short_url)} className={shared.btnCopy}>
+        <button
+          onClick={() => onCopy(result.short_url)}
+          className={shared.btnCopy}
+        >
           {copied ? 'Copied!' : 'Copy'}
         </button>
       </div>
@@ -42,7 +45,11 @@ export default function ResultCard({
         ) : (
           <div className={styles.titleRetryRow}>
             <p className={styles.pageTitleFallback}>Title not ready yet.</p>
-            <button type="button" className={styles.retryButton} onClick={onRetryTitle}>
+            <button
+              type="button"
+              className={styles.retryButton}
+              onClick={onRetryTitle}
+            >
               Retry lookup
             </button>
           </div>
@@ -51,7 +58,10 @@ export default function ResultCard({
 
       <p className={styles.targetUrl}>{result.target_url}</p>
 
-      <button className={shared.btnGhost} onClick={() => onViewStats(result.short_code)}>
+      <button
+        className={shared.btnGhost}
+        onClick={() => onViewStats(result.short_code)}
+      >
         View stats
       </button>
     </div>

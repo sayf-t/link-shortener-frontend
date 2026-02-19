@@ -15,36 +15,45 @@ interface Props {
 }
 
 export default function StatsView({ initialCode = '', linksPort }: Props) {
-  const links = useMemo(() => linksPort ?? createLinkShortenerApiAdapter(), [linksPort])
+  const links = useMemo(
+    () => linksPort ?? createLinkShortenerApiAdapter(),
+    [linksPort]
+  )
   const [code, setCode] = useState(initialCode)
   const [stats, setStats] = useState<LinkStats | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const abortControllerRef = useRef<AbortController | null>(null)
 
-  const fetchStats = useCallback(async (shortCode: string) => {
-    abortControllerRef.current?.abort()
-    const controller = new AbortController()
-    abortControllerRef.current = controller
-    const { signal } = controller
+  const fetchStats = useCallback(
+    async (shortCode: string) => {
+      abortControllerRef.current?.abort()
+      const controller = new AbortController()
+      abortControllerRef.current = controller
+      const { signal } = controller
 
-    setLoading(true)
-    setError(null)
-    setStats(null)
+      setLoading(true)
+      setError(null)
+      setStats(null)
 
-    try {
-      const data = await links.getLinkStats(shortCode, signal)
-      if (!signal.aborted) setStats(data)
-    } catch (err) {
-      if (!signal.aborted && (err as Error).name !== 'AbortError') {
-        setError(err instanceof Error ? err.message : DEFAULT_ERROR_MESSAGE)
+      try {
+        const data = await links.getLinkStats(shortCode, signal)
+        if (!signal.aborted) setStats(data)
+      } catch (err) {
+        if (!signal.aborted && (err as Error).name !== 'AbortError') {
+          setError(err instanceof Error ? err.message : DEFAULT_ERROR_MESSAGE)
+        }
+      } finally {
+        if (!signal.aborted) setLoading(false)
       }
-    } finally {
-      if (!signal.aborted) setLoading(false)
-    }
-  }, [links])
+    },
+    [links]
+  )
 
-  const debouncedFetchStats = useDebouncedCallback(fetchStats, LOOKUP_DEBOUNCE_MS)
+  const debouncedFetchStats = useDebouncedCallback(
+    fetchStats,
+    LOOKUP_DEBOUNCE_MS
+  )
 
   useEffect(() => {
     if (!initialCode) return

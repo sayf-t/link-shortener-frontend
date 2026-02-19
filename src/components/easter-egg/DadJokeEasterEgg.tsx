@@ -23,7 +23,7 @@ export default function DadJokeEasterEgg({
 }: DadJokeEasterEggProps = {}) {
   const jokeAdapter = useMemo(
     () => jokePort ?? createIcanHazDadJokeAdapter(),
-    [jokePort],
+    [jokePort]
   )
   const gifAdapter = useMemo(() => {
     if (gifPort !== undefined) return gifPort
@@ -159,7 +159,10 @@ export default function DadJokeEasterEgg({
             </>
           )}
           {imageOpen && (
-            <div className={styles.subBubble} onClick={(e) => e.stopPropagation()}>
+            <div
+              className={styles.subBubble}
+              onClick={(e) => e.stopPropagation()}
+            >
               <button
                 type="button"
                 className={styles.close}
@@ -172,7 +175,9 @@ export default function DadJokeEasterEgg({
               >
                 ×
               </button>
-              {gifLoading && <p className={styles.message}>Loading trending GIFs…</p>}
+              {gifLoading && (
+                <p className={styles.message}>Loading trending GIFs…</p>
+              )}
               {gifError && <p className={styles.error}>{gifError}</p>}
               {gifUrl && !gifLoading && (
                 <img

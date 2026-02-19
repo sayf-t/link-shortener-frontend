@@ -20,7 +20,9 @@ export default function BarList({ items }: Props) {
             <span className={styles.key}>{item.label}</span>
             <span className={styles.value}>
               {item.count}
-              {item.showPct && <span className={styles.pct}> ({item.pct}%)</span>}
+              {item.showPct && (
+                <span className={styles.pct}> ({item.pct}%)</span>
+              )}
             </span>
           </div>
           <div className={styles.track}>

@@ -17,7 +17,7 @@ export function createLocalStorageHistoryAdapter(): LinkHistoryPort {
             typeof (e as HistoryEntry).target_url === 'string' &&
             typeof (e as HistoryEntry).short_url === 'string' &&
             typeof (e as HistoryEntry).short_code === 'string' &&
-            typeof (e as HistoryEntry).created_at === 'string',
+            typeof (e as HistoryEntry).created_at === 'string'
         )
       } catch {
         return []
@@ -28,7 +28,7 @@ export function createLocalStorageHistoryAdapter(): LinkHistoryPort {
       try {
         localStorage.setItem(
           HISTORY_STORAGE_KEY,
-          JSON.stringify(entries.slice(0, HISTORY_MAX_ENTRIES)),
+          JSON.stringify(entries.slice(0, HISTORY_MAX_ENTRIES))
         )
       } catch {
         // quota or other storage errors
