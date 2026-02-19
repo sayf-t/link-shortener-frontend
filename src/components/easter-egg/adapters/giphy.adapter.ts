@@ -1,7 +1,4 @@
-/**
- * GIPHY trending API adapter. Implements GifPort.
- * @see https://developers.giphy.com/docs/api/endpoint#trending
- */
+// https://developers.giphy.com/docs/api/endpoint#trending
 import type { GifItem, GifPort, GifPortOptions } from '../ports/gif.port'
 
 const TRENDING_URL = 'https://api.giphy.com/v1/gifs/trending'

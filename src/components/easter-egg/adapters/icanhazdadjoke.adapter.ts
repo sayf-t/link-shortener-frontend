@@ -1,7 +1,4 @@
-/**
- * icanhazdadjoke.com adapter. Implements JokePort.
- * @see https://icanhazdadjoke.com/api
- */
+// https://icanhazdadjoke.com/api
 import type { JokePort } from '../ports/joke.port'
 
 const BASE_URL = 'https://icanhazdadjoke.com'

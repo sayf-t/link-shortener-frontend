@@ -1,12 +1,3 @@
-/**
- * Easter egg (dad joke + trending GIF). Not rendered in App by default.
- * Uses clean architecture: ports (interfaces) + adapters (external APIs).
- *
- * To show: import { DadJokeEasterEgg } from './components/easter-egg'
- * and render <DadJokeEasterEgg /> in App.
- *
- * To inject or mock: pass jokePort and/or gifPort props.
- */
 export { default as DadJokeEasterEgg } from './DadJokeEasterEgg'
 export type { DadJokeEasterEggProps } from './DadJokeEasterEgg'
 

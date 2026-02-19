@@ -6,9 +6,7 @@ import { createGiphyAdapter } from './adapters/giphy.adapter'
 import styles from './DadJokeEasterEgg.module.css'
 
 export interface DadJokeEasterEggProps {
-  /** Joke port. Defaults to icanhazdadjoke adapter if not provided. */
   jokePort?: JokePort
-  /** GIF port. Defaults to Giphy adapter (requires VITE_GIPHY_API_KEY) if not provided. */
   gifPort?: GifPort | null
 }
 

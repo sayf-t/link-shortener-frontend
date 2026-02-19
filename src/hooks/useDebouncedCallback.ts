@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react'
 
-/**
- * Returns a debounced version of `fn` that only runs after `delay`ms
- * with no further calls. Resets the timer on each call. Cleans up on unmount.
- */
+/** Pending timer is cleared on unmount. */
 export function useDebouncedCallback<A extends unknown[]>(
   fn: (...args: A) => void,
   delay: number
