@@ -55,6 +55,11 @@ Open `http://localhost:5173`.
 - **CSS Modules:** styles are locally scoped (`*.module.css`) to avoid global leakage and keep refactors safe.
 - **A11y by default (striving):** semantic tabs, explicit form labels, live error regions, and visible keyboard focus states.
 
+## Interaction Details
+
+- **Debounced actions:** submit and lookup interactions use `useDebouncedCallback` to avoid rapid repeated requests while users click quickly.
+- **Why:** this reduces accidental duplicate calls, smooths UI feedback, and lowers backend load without changing user flow.
+
 ## API
 
 This frontend uses:
