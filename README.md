@@ -57,8 +57,11 @@ Open `http://localhost:5173`.
 
 ## Interaction Details
 
-- **Debounced actions:** submit and lookup interactions use `useDebouncedCallback` to avoid rapid repeated requests while users click quickly.
-- **Why:** this reduces accidental duplicate calls, smooths UI feedback, and lowers backend load without changing user flow.
+- **Debounced submissions:** form actions use `useDebouncedCallback` to prevent duplicate requests on rapid clicks.
+- **Toast feedback:** copy actions and errors surface via a shared toast (`useToast`) instead of inline state swaps.
+- **Loading skeletons:** pulsing placeholders appear while requests are in flight, reducing layout shift.
+- **Empty states:** friendly messages when stats have zero clicks or before the first lookup.
+- **Dismissible errors:** error alerts include a close button; StatsView errors offer a retry action.
 
 ## API
 
