@@ -49,17 +49,11 @@ Open `http://localhost:5173`.
 
 ## Architecture
 
-This app uses a simple **ports/adapters** pattern to keep UI code decoupled from infrastructure.
-
-- **Ports** (`src/ports/`): interfaces like `LinksPort` and `LinkHistoryPort`
-- **Adapters** (`src/adapters/`): concrete implementations (API fetch + localStorage)
-- **Features** (`src/components/`): consume ports, not implementation details
-
-Why this matters:
-
-- Easier to swap backend/storage implementations later
-- Easier to test feature components with injected mock ports
-- Keeps components focused on UI and state, not transport details
+- **Ports + adapters:** feature UI depends on interfaces (`src/ports/`), while infra lives in adapters (`src/adapters/`).  
+  This makes backend/storage changes low-risk and easy to test with injected mocks.
+- **Feature-first components:** UI/state stays in `src/components/`, transport details stay out of component logic.
+- **CSS Modules:** styles are locally scoped (`*.module.css`) to avoid global leakage and keep refactors safe.
+- **A11y by default (striving):** semantic tabs, explicit form labels, live error regions, and visible keyboard focus states.
 
 ## API
 
