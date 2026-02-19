@@ -1,0 +1,107 @@
+.accordion {
+  margin-top: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-surface);
+  overflow: hidden;
+}
+
+.accordionHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: transparent;
+  border: 0;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.accordionHeader:hover {
+  background: var(--bg-elevated, rgba(0, 0, 0, 0.04));
+}
+
+.accordionTitle {
+  flex: 1;
+}
+
+.accordionCount {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--bg-elevated, rgba(0, 0, 0, 0.06));
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+}
+
+.accordionChevron,
+.accordionChevronOpen {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  transition: transform 0.2s;
+}
+
+.accordionChevronOpen {
+  transform: rotate(-180deg);
+}
+
+.accordionPanel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.25s ease-out;
+}
+
+.accordionPanelOpen {
+  max-height: 70vh;
+  overflow: auto;
+  transition: max-height 0.35s ease-in;
+}
+
+.historyList {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.historyItem {
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.historyItem:last-child {
+  border-bottom: 0;
+}
+
+.historyShortUrl {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.35rem;
+}
+
+.historyShortUrl a {
+  font-size: 0.95rem;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+.historyTitle {
+  margin: 0 0 0.25rem;
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.35;
+}
+
+.historyTarget {
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  word-break: break-all;
+}
