@@ -105,7 +105,11 @@ export default function StatsView({ initialCode = '', linksPort }: Props) {
   return (
     <section className={shared.panel}>
       <form onSubmit={handleSubmit} className={shared.form}>
+        <label htmlFor="stats-short-code" className={shared.srOnly}>
+          Short code
+        </label>
         <input
+          id="stats-short-code"
           type="text"
           value={code}
           onChange={(e) => setCode(e.target.value)}
@@ -123,7 +127,11 @@ export default function StatsView({ initialCode = '', linksPort }: Props) {
         </button>
       </form>
 
-      {error && <div className={shared.alertError}>{error}</div>}
+      {error && (
+        <div className={shared.alertError} role="alert" aria-live="assertive">
+          {error}
+        </div>
+      )}
 
       {stats && (
         <div className={styles.card}>

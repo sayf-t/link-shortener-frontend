@@ -160,7 +160,11 @@ export default function ShortenForm({
   return (
     <section className={shared.panel}>
       <form onSubmit={handleSubmit} className={shared.form}>
+        <label htmlFor="shorten-target-url" className={shared.srOnly}>
+          URL to shorten
+        </label>
         <input
+          id="shorten-target-url"
           type="url"
           value={targetUrl}
           onChange={(e) => setTargetUrl(e.target.value)}
@@ -178,7 +182,11 @@ export default function ShortenForm({
         </button>
       </form>
 
-      {error && <div className={shared.alertError}>{error}</div>}
+      {error && (
+        <div className={shared.alertError} role="alert" aria-live="assertive">
+          {error}
+        </div>
+      )}
 
       {result && (
         <ResultCard
