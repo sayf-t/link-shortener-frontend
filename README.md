@@ -1,68 +1,57 @@
 # Link Shortener Frontend
 
-A simple React + TypeScript frontend for the Link Shortener API. Create short links and view their statistics.
-
-## Features
-
-- **Create Short Links**: Enter a long URL and get a shortened version
-- **View Statistics**: Check click counts, country breakdowns, and date-based analytics for any short link
-- **Copy to Clipboard**: Easily copy short URLs with one click
+A simple React + TypeScript app for creating short links and viewing click stats.
 
 ## Getting Started
 
-### Prerequisites
-
-- Node.js 18+ and npm/yarn
-- The Link Shortener API running (default: http://localhost:3000)
-
-### Installation
-
 ```bash
-npm install
+git clone <your-repo-url>
+cd link-shortener-frontend
+bun install
 ```
 
-### Configuration
+## Environment
 
-Create a `.env` file (or copy `.env.example`) to configure the API URL:
+Create a `.env.local` file:
 
 ```bash
 VITE_API_URL=http://localhost:3000
+# optional (for easter egg GIFs)
+VITE_GIPHY_API_KEY=your_giphy_key
 ```
 
-If not set, it defaults to `http://localhost:3000`.
+If `VITE_API_URL` is not set, it defaults to `http://localhost:3000`.
 
-### Development
+## Running Locally
 
 ```bash
-npm run dev
+bun run dev
 ```
 
-The app will be available at `http://localhost:5173` (or the next available port).
+Open `http://localhost:5173`.
 
-### Build
+## Scripts
 
-```bash
-npm run build
-```
+- `bun run dev` - start local dev server
+- `bun run build` - type-check and build production bundle
+- `bun run preview` - preview production build locally
+- `bun run lint` - run ESLint
+- `bun run format` - format files with Prettier
+- `bun run format:check` - check Prettier formatting
 
-### Preview Production Build
+## Features
 
-```bash
-npm run preview
-```
+- Create short links from long URLs
+- View per-link analytics (total clicks, countries, dates, visits)
+- Copy short URLs and short codes quickly
+- Local history of recently shortened links
+- Optional dad-joke + GIF easter egg
 
-## Usage
+## API
 
-1. **Create a Short Link**: Enter a URL in the "Create Short Link" section and click "Shorten"
-2. **View Stats**: Enter a short code in the "View Stats" section and click "Get Stats"
+This frontend uses:
 
-## API Endpoints Used
+- `POST /api/v1/links`
+- `GET /api/v1/links/:short_code/stats`
 
-- `POST /api/v1/links` - Create a new short link
-- `GET /api/v1/links/:short_code/stats` - Get statistics for a short link
-
-See the [API README](../link-shortener-api/README.md) for more details.
-
----
-
-# link-shortener-frontend
+Backend docs: [link-shortener-api/README.md](../link-shortener-api/README.md)
