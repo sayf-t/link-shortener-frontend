@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { getLinkStats } from '../api'
-import { LOOKUP_DEBOUNCE_MS, DEFAULT_ERROR_MESSAGE } from '../constants'
-import { useDebouncedCallback } from '../hooks/useDebouncedCallback'
-import type { LinkStats } from '../types/links'
+import { getLinkStats } from '../../api'
+import { LOOKUP_DEBOUNCE_MS, DEFAULT_ERROR_MESSAGE } from '../../constants'
+import { useDebouncedCallback } from '../../hooks/useDebouncedCallback'
+import type { LinkStats } from '../../types/links'
 import BarList from './BarList'
 import VisitsTable from './VisitsTable'
-import shared from '../styles/shared.module.css'
+import shared from '../../styles/shared.module.css'
 import styles from './StatsView.module.css'
 
 interface Props {

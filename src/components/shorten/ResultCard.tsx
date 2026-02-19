@@ -1,5 +1,5 @@
-import type { CreateLinkResponse } from '../types/links'
-import shared from '../styles/shared.module.css'
+import type { CreateLinkResponse } from '../../types/links'
+import shared from '../../styles/shared.module.css'
 import styles from './ResultCard.module.css'
 
 interface Props {

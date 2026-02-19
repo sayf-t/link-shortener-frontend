@@ -1,17 +1,17 @@
 import { useCallback, useEffect, useState } from 'react'
-import { createShortLink, getLinkStats } from '../api'
+import { createShortLink, getLinkStats } from '../../api'
 import {
   SUBMIT_DEBOUNCE_MS,
   TITLE_POLL_INTERVAL_MS,
   TITLE_POLL_MAX_ATTEMPTS,
   DEFAULT_ERROR_MESSAGE,
-} from '../constants'
-import { useDebouncedCallback } from '../hooks/useDebouncedCallback'
-import { loadHistory, saveHistory } from '../lib/linkHistory'
-import type { CreateLinkResponse, HistoryEntry } from '../types/links'
+} from '../../constants'
+import { useDebouncedCallback } from '../../hooks/useDebouncedCallback'
+import { loadHistory, saveHistory } from '../../lib/linkHistory'
+import type { CreateLinkResponse, HistoryEntry } from '../../types/links'
 import ResultCard from './ResultCard'
 import HistoryAccordion from './HistoryAccordion'
-import shared from '../styles/shared.module.css'
+import shared from '../../styles/shared.module.css'
 
 interface Props {
   onViewStats: (shortCode: string) => void

@@ -1,5 +1,5 @@
-import type { HistoryEntry } from '../types/links'
-import shared from '../styles/shared.module.css'
+import type { HistoryEntry } from '../../types/links'
+import shared from '../../styles/shared.module.css'
 import styles from './HistoryAccordion.module.css'
 
 interface Props {

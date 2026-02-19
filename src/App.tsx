@@ -1,19 +1,19 @@
-import { useState } from 'react'
-import ShortenForm from './components/ShortenForm'
-import StatsView from './components/StatsView'
-import DadJokeEasterEgg from './components/DadJokeEasterEgg'
-import styles from './App.module.css'
+import { useState } from "react";
+import { ShortenForm } from "./components/shorten";
+import { StatsView } from "./components/stats";
+import { DadJokeEasterEgg } from "./components/easter-egg";
+import styles from "./App.module.css";
 
-type Tab = 'shorten' | 'stats'
+type Tab = "shorten" | "stats";
 
 export default function App() {
-  const [tab, setTab] = useState<Tab>('shorten')
-  const [statsCode, setStatsCode] = useState('')
+  const [tab, setTab] = useState<Tab>("shorten");
+  const [statsCode, setStatsCode] = useState("");
 
   const viewStats = (code: string) => {
-    setStatsCode(code)
-    setTab('stats')
-  }
+    setStatsCode(code);
+    setTab("stats");
+  };
 
   return (
     <div className={styles.app}>
@@ -24,23 +24,23 @@ export default function App() {
 
       <nav className={styles.tabs}>
         <button
-          className={tab === 'shorten' ? styles.tabActive : styles.tab}
-          onClick={() => setTab('shorten')}
+          className={tab === "shorten" ? styles.tabActive : styles.tab}
+          onClick={() => setTab("shorten")}
         >
           Shorten
         </button>
         <button
-          className={tab === 'stats' ? styles.tabActive : styles.tab}
-          onClick={() => setTab('stats')}
+          className={tab === "stats" ? styles.tabActive : styles.tab}
+          onClick={() => setTab("stats")}
         >
           Stats
         </button>
       </nav>
 
-      {tab === 'shorten' && <ShortenForm onViewStats={viewStats} />}
-      {tab === 'stats' && <StatsView initialCode={statsCode} />}
+      {tab === "shorten" && <ShortenForm onViewStats={viewStats} />}
+      {tab === "stats" && <StatsView initialCode={statsCode} />}
 
       <DadJokeEasterEgg />
     </div>
-  )
+  );
 }

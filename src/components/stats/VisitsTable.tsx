@@ -1,4 +1,4 @@
-import type { Visit } from '../types/links'
+import type { Visit } from '../../types/links'
 import styles from './VisitsTable.module.css'
 
 function formatTimestamp(iso: string): string {

@@ -1,45 +1,40 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
+import type { JokePort } from './ports/joke.port'
+import type { GifPort, GifItem } from './ports/gif.port'
+import { createIcanHazDadJokeAdapter } from './adapters/icanhazdadjoke.adapter'
+import { createGiphyAdapter } from './adapters/giphy.adapter'
 import styles from './DadJokeEasterEgg.module.css'
 
-const DAD_JOKE_API = 'https://icanhazdadjoke.com/'
-const USER_AGENT = 'Link Shortener Easter Egg (https://github.com)'
-const GIPHY_TRENDING_API = 'https://api.giphy.com/v1/gifs/trending'
-
-interface DadJokeResponse {
-  id: string
-  joke: string
-  status: number
+export interface DadJokeEasterEggProps {
+  /** Joke port. Defaults to icanhazdadjoke adapter if not provided. */
+  jokePort?: JokePort
+  /** GIF port. Defaults to Giphy adapter (requires VITE_GIPHY_API_KEY) if not provided. */
+  gifPort?: GifPort | null
 }
 
-interface GiphyImageRendition {
-  url: string
-  width: string
-  height: string
+function pickRandom<T>(list: T[]): T | undefined {
+  if (list.length === 0) return undefined
+  return list[Math.floor(Math.random() * list.length)]
 }
 
-interface GiphyGifObject {
-  id: string
-  title: string
-  images: {
-    downsized_medium?: GiphyImageRendition
-    fixed_height?: GiphyImageRendition
-    original: GiphyImageRendition
-  }
-}
+export default function DadJokeEasterEgg({
+  jokePort,
+  gifPort,
+}: DadJokeEasterEggProps = {}) {
+  const jokeAdapter = useMemo(
+    () => jokePort ?? createIcanHazDadJokeAdapter(),
+    [jokePort],
+  )
+  const gifAdapter = useMemo(() => {
+    if (gifPort !== undefined) return gifPort
+    const key = import.meta.env.VITE_GIPHY_API_KEY
+    return key ? createGiphyAdapter({ apiKey: key }) : null
+  }, [gifPort])
 
-interface GiphyTrendingResponse {
-  data: GiphyGifObject[]
-}
-
-function pickGifUrl(img: GiphyGifObject['images']): string | undefined {
-  return img?.downsized_medium?.url ?? img?.fixed_height?.url ?? img?.original?.url
-}
-
-export default function DadJokeEasterEgg() {
   const [open, setOpen] = useState(false)
   const [joke, setJoke] = useState<string | null>(null)
   const [imageOpen, setImageOpen] = useState(false)
-  const [trendingGifs, setTrendingGifs] = useState<GiphyGifObject[] | null>(null)
+  const [trendingGifs, setTrendingGifs] = useState<GifItem[] | null>(null)
   const [gifUrl, setGifUrl] = useState<string | null>(null)
   const [gifTitle, setGifTitle] = useState<string | null>(null)
   const [gifLoading, setGifLoading] = useState(false)
@@ -47,74 +42,57 @@ export default function DadJokeEasterEgg() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const apiKey = import.meta.env.VITE_GIPHY_API_KEY
-
   const fetchJoke = useCallback(async () => {
     setLoading(true)
     setError(null)
     setImageOpen(false)
     try {
-      const res = await fetch(DAD_JOKE_API, {
-        headers: {
-          Accept: 'application/json',
-          'User-Agent': USER_AGENT,
-        },
-      })
-      if (!res.ok) throw new Error('Failed to fetch joke')
-      const data: DadJokeResponse = await res.json()
-      setJoke(data.joke)
+      const text = await jokeAdapter.getRandomJoke()
+      setJoke(text)
     } catch {
       setError('Could not load joke.')
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [jokeAdapter])
 
-  const showRandomFromTrending = useCallback((list: GiphyGifObject[]) => {
-    if (list.length === 0) return
-    const gif = list[Math.floor(Math.random() * list.length)]
-    const url = pickGifUrl(gif.images)
-    if (url) {
-      setGifUrl(url)
-      setGifTitle(gif.title ?? 'Trending GIF')
+  const showRandomFromList = useCallback((list: GifItem[]) => {
+    const gif = pickRandom(list)
+    if (gif) {
+      setGifUrl(gif.imageUrl)
+      setGifTitle(gif.title)
     }
   }, [])
 
-  const fetchTrendingGifs = useCallback(async () => {
-    if (!apiKey) {
+  const fetchTrendingGifsHandler = useCallback(async () => {
+    if (!gifAdapter) {
       setGifError('Add VITE_GIPHY_API_KEY to show trending GIFs.')
       return
     }
     setGifLoading(true)
     setGifError(null)
     try {
-      const params = new URLSearchParams({
-        api_key: apiKey,
-        limit: '20',
+      const list = await gifAdapter.getTrendingGifs({
+        limit: 20,
         rating: 'g',
       })
-      const res = await fetch(`${GIPHY_TRENDING_API}?${params}`)
-      if (!res.ok) throw new Error('Failed to fetch GIFs')
-      const json: GiphyTrendingResponse = await res.json()
-      const list = json.data ?? []
-      const withUrl = list.filter((g) => pickGifUrl(g.images))
-      if (withUrl.length === 0) throw new Error('No GIFs in response')
-      setTrendingGifs(withUrl)
-      showRandomFromTrending(withUrl)
+      if (list.length === 0) throw new Error('No GIFs in response')
+      setTrendingGifs(list)
+      showRandomFromList(list)
     } catch {
       setGifError('Could not load GIFs.')
     } finally {
       setGifLoading(false)
     }
-  }, [apiKey, showRandomFromTrending])
+  }, [gifAdapter, showRandomFromList])
 
   const handleAnotherGif = useCallback(() => {
     if (trendingGifs && trendingGifs.length > 0) {
-      showRandomFromTrending(trendingGifs)
+      showRandomFromList(trendingGifs)
     } else {
-      fetchTrendingGifs()
+      fetchTrendingGifsHandler()
     }
-  }, [trendingGifs, showRandomFromTrending, fetchTrendingGifs])
+  }, [trendingGifs, showRandomFromList, fetchTrendingGifsHandler])
 
   const handleToggle = () => {
     if (!open) {
@@ -161,8 +139,9 @@ export default function DadJokeEasterEgg() {
                   onClick={(e) => {
                     e.stopPropagation()
                     setImageOpen(true)
-                    fetchTrendingGifs()
+                    fetchTrendingGifsHandler()
                   }}
+                  disabled={!gifAdapter}
                 >
                   Trending GIF
                 </button>
