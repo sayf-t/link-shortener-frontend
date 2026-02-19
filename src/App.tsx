@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import ShortenForm from './components/ShortenForm'
 import StatsView from './components/StatsView'
+import DadJokeEasterEgg from './components/DadJokeEasterEgg'
 import styles from './App.module.css'
 
 type Tab = 'shorten' | 'stats'
@@ -38,6 +39,8 @@ export default function App() {
 
       {tab === 'shorten' && <ShortenForm onViewStats={viewStats} />}
       {tab === 'stats' && <StatsView initialCode={statsCode} />}
+
+      <DadJokeEasterEgg />
     </div>
   )
 }
