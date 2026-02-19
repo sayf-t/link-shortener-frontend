@@ -90,7 +90,13 @@
   padding-right: 1.5rem;
 }
 
-.another {
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.linkButton {
   all: unset;
   cursor: pointer;
   font-size: 0.8rem;
@@ -99,7 +105,49 @@
   transition: color 0.15s;
 }
 
-.another:hover {
+.linkButton:hover {
   color: var(--accent-hover);
   text-decoration: underline;
+}
+
+.subBubble {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 0;
+  min-width: 420px;
+  max-width: 520px;
+  padding: 0.75rem;
+  padding-top: 2.25rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+}
+
+.subBubble .close {
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+.subBubble .actions {
+  margin-top: 0.75rem;
+}
+
+.jokeImage {
+  display: block;
+  width: 100%;
+  min-width: 380px;
+  height: auto;
+  border-radius: 6px;
+}
+
+.jokeImageCaption {
+  margin: 0.75rem 0 0;
+  padding: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg-surface);
+  border-radius: 6px;
+  border: 1px solid var(--border);
 }
