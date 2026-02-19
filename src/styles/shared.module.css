@@ -135,6 +135,38 @@
   border: 0;
 }
 
+/* ── Skeletons ─────────────────────────────────────── */
+
+.skeleton {
+  height: 0.85rem;
+  border-radius: 6px;
+  background: var(--bg-elevated);
+  animation: shimmer 1.2s ease-in-out infinite;
+}
+
+.skeletonBlock {
+  composes: skeleton;
+  height: 3.5rem;
+}
+
+.skeletonCard {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 /* ── Code badge ─────────────────────────────────────── */
 
 .code {

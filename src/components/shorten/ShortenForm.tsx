@@ -188,6 +188,20 @@ export default function ShortenForm({
         </div>
       )}
 
+      {loading && !result && (
+        <div className={shared.skeletonCard}>
+          <div className={shared.skeleton} style={{ width: '60%' }} />
+          <div
+            className={shared.skeleton}
+            style={{ width: '40%', marginTop: '0.5rem' }}
+          />
+          <div
+            className={shared.skeleton}
+            style={{ width: '80%', marginTop: '0.5rem' }}
+          />
+        </div>
+      )}
+
       {result && (
         <ResultCard
           result={result}

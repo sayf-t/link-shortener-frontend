@@ -133,6 +133,32 @@ export default function StatsView({ initialCode = '', linksPort }: Props) {
         </div>
       )}
 
+      {loading && (
+        <div className={shared.skeletonCard}>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div style={{ flex: 1 }}>
+              <div className={shared.skeleton} style={{ width: '50%' }} />
+              <div
+                className={shared.skeleton}
+                style={{ width: '30%', marginTop: '0.5rem' }}
+              />
+            </div>
+            <div className={shared.skeletonBlock} style={{ width: '3rem' }} />
+          </div>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '1rem',
+              marginTop: '1rem',
+            }}
+          >
+            <div className={shared.skeletonBlock} />
+            <div className={shared.skeletonBlock} />
+          </div>
+        </div>
+      )}
+
       {stats && (
         <div className={styles.card}>
           <div className={styles.header}>
