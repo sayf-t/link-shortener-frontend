@@ -184,7 +184,15 @@ export default function ShortenForm({
 
       {error && (
         <div className={shared.alertError} role="alert" aria-live="assertive">
-          {error}
+          <span className={shared.alertErrorBody}>{error}</span>
+          <button
+            type="button"
+            className={shared.alertErrorDismiss}
+            onClick={() => setError(null)}
+            aria-label="Dismiss error"
+          >
+            &times;
+          </button>
         </div>
       )}
 

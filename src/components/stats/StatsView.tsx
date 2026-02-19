@@ -129,7 +129,26 @@ export default function StatsView({ initialCode = '', linksPort }: Props) {
 
       {error && (
         <div className={shared.alertError} role="alert" aria-live="assertive">
-          {error}
+          <div className={shared.alertErrorBody}>
+            <span>{error}</span>
+            {code.trim() && (
+              <button
+                type="button"
+                className={shared.alertRetry}
+                onClick={() => fetchStats(code.trim())}
+              >
+                Try again
+              </button>
+            )}
+          </div>
+          <button
+            type="button"
+            className={shared.alertErrorDismiss}
+            onClick={() => setError(null)}
+            aria-label="Dismiss error"
+          >
+            &times;
+          </button>
         </div>
       )}
 
