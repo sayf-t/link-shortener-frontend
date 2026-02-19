@@ -6,6 +6,7 @@ import {
   DEFAULT_ERROR_MESSAGE,
 } from '../../constants'
 import { useDebouncedCallback } from '../../hooks/useDebouncedCallback'
+import { useToast } from '../../hooks/useToast'
 import type { LinksPort } from '../../ports/links.port'
 import type { LinkHistoryPort } from '../../ports/link-history.port'
 import { createLinkShortenerApiAdapter } from '../../adapters/link-shortener-api.adapter'
@@ -35,12 +36,12 @@ export default function ShortenForm({
     [historyPort]
   )
 
+  const toast = useToast()
+
   const [targetUrl, setTargetUrl] = useState('')
   const [result, setResult] = useState<CreateLinkResponse | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [copied, setCopied] = useState(false)
-  const [copiedCode, setCopiedCode] = useState<string | null>(null)
   const [titleLoading, setTitleLoading] = useState(false)
   const [titleLookupRetryToken, setTitleLookupRetryToken] = useState(0)
   const [history, setHistory] = useState<HistoryEntry[]>(() =>
@@ -145,17 +146,17 @@ export default function ShortenForm({
     debouncedSubmit(trimmed)
   }
 
-  const handleCopyResult = (text: string) => {
-    navigator.clipboard.writeText(text)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
-
-  const handleCopyHistory = (text: string, shortCode: string) => {
-    navigator.clipboard.writeText(text)
-    setCopiedCode(shortCode)
-    setTimeout(() => setCopiedCode(null), 2000)
-  }
+  const handleCopy = useCallback(
+    async (text: string) => {
+      try {
+        await navigator.clipboard.writeText(text)
+        toast.show('Copied to clipboard')
+      } catch {
+        toast.show('Failed to copy', 'error')
+      }
+    },
+    [toast]
+  )
 
   return (
     <section className={shared.panel}>
@@ -214,8 +215,7 @@ export default function ShortenForm({
         <ResultCard
           result={result}
           titleLoading={titleLoading}
-          copied={copied}
-          onCopy={handleCopyResult}
+          onCopy={handleCopy}
           onRetryTitle={() => setTitleLookupRetryToken((v) => v + 1)}
           onViewStats={onViewStats}
         />
@@ -224,9 +224,8 @@ export default function ShortenForm({
       <HistoryAccordion
         history={history}
         open={accordionOpen}
-        copiedCode={copiedCode}
         onToggle={() => setAccordionOpen((open) => !open)}
-        onCopy={handleCopyHistory}
+        onCopy={handleCopy}
         onViewStats={onViewStats}
       />
     </section>

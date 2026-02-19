@@ -5,7 +5,6 @@ import styles from './ResultCard.module.css'
 interface Props {
   result: CreateLinkResponse
   titleLoading: boolean
-  copied: boolean
   onCopy: (text: string) => void
   onRetryTitle: () => void
   onViewStats: (shortCode: string) => void
@@ -14,7 +13,6 @@ interface Props {
 export default function ResultCard({
   result,
   titleLoading,
-  copied,
   onCopy,
   onRetryTitle,
   onViewStats,
@@ -29,7 +27,7 @@ export default function ResultCard({
           onClick={() => onCopy(result.short_url)}
           className={shared.btnCopy}
         >
-          {copied ? 'Copied!' : 'Copy'}
+          Copy
         </button>
       </div>
 

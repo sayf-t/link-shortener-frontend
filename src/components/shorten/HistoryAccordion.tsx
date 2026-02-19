@@ -5,16 +5,14 @@ import styles from './HistoryAccordion.module.css'
 interface Props {
   history: HistoryEntry[]
   open: boolean
-  copiedCode: string | null
   onToggle: () => void
-  onCopy: (text: string, shortCode: string) => void
+  onCopy: (text: string) => void
   onViewStats: (shortCode: string) => void
 }
 
 export default function HistoryAccordion({
   history,
   open,
-  copiedCode,
   onToggle,
   onCopy,
   onViewStats,
@@ -64,10 +62,10 @@ export default function HistoryAccordion({
                 </a>
                 <button
                   type="button"
-                  onClick={() => onCopy(entry.short_url, entry.short_code)}
+                  onClick={() => onCopy(entry.short_url)}
                   className={shared.btnCopy}
                 >
-                  {copiedCode === entry.short_code ? 'Copied!' : 'Copy'}
+                  Copy
                 </button>
               </div>
               {entry.title && (
