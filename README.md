@@ -47,6 +47,20 @@ Open `http://localhost:5173`.
 - Local history of recently shortened links
 - Optional dad-joke + GIF easter egg
 
+## Architecture
+
+This app uses a simple **ports/adapters** pattern to keep UI code decoupled from infrastructure.
+
+- **Ports** (`src/ports/`): interfaces like `LinksPort` and `LinkHistoryPort`
+- **Adapters** (`src/adapters/`): concrete implementations (API fetch + localStorage)
+- **Features** (`src/components/`): consume ports, not implementation details
+
+Why this matters:
+
+- Easier to swap backend/storage implementations later
+- Easier to test feature components with injected mock ports
+- Keeps components focused on UI and state, not transport details
+
 ## API
 
 This frontend uses:
