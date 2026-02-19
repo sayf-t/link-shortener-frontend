@@ -6,7 +6,7 @@ import VisitsTable from "./VisitsTable";
 import shared from "../styles/shared.module.css";
 import styles from "./StatsView.module.css";
 
-const LOOKUP_DEBOUNCE_MS = 5000;
+const LOOKUP_DEBOUNCE_MS = 300;
 
 interface Props {
   initialCode?: string;
@@ -59,7 +59,11 @@ export default function StatsView({ initialCode = "" }: Props) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = code.trim();
-    if (trimmed) debouncedFetchStats(trimmed);
+    if (!trimmed) return;
+    setLoading(true);
+    setError(null);
+    setStats(null);
+    debouncedFetchStats(trimmed);
   };
 
   const countryItems = stats

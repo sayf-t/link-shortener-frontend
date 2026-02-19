@@ -18,7 +18,7 @@ export interface HistoryEntry {
 
 const TITLE_POLL_INTERVAL_MS = 1500;
 const TITLE_POLL_MAX_ATTEMPTS = 6;
-const SUBMIT_DEBOUNCE_MS = 3000;
+const SUBMIT_DEBOUNCE_MS = 300;
 const HISTORY_STORAGE_KEY = "link-shortener-history";
 const HISTORY_MAX_ENTRIES = 50;
 
@@ -153,7 +153,10 @@ export default function ShortenForm({ onViewStats }: Props) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const trimmed = targetUrl.trim();
-    if (trimmed) debouncedSubmit(trimmed);
+    if (!trimmed) return;
+    setLoading(true);
+    setError(null);
+    debouncedSubmit(trimmed);
   };
 
   const copyToClipboard = (text: string, forCode?: string) => {
