@@ -159,6 +159,12 @@ export default function StatsView({ initialCode = '', linksPort }: Props) {
         </div>
       )}
 
+      {!loading && !stats && !error && (
+        <p className={styles.hint}>
+          Enter a short code above to view analytics.
+        </p>
+      )}
+
       {stats && (
         <div className={styles.card}>
           <div className={styles.header}>
@@ -174,21 +180,27 @@ export default function StatsView({ initialCode = '', linksPort }: Props) {
             </div>
           </div>
 
-          <div className={styles.grid}>
-            {countryItems.length > 0 && (
+          {stats.total_clicks === 0 && (
+            <p className={styles.emptyMessage}>
+              No clicks recorded yet. Share your link to start tracking.
+            </p>
+          )}
+
+          {countryItems.length > 0 && (
+            <div className={styles.grid}>
               <div className={styles.section}>
                 <h3 className={styles.sectionHeading}>By country</h3>
                 <BarList items={countryItems} />
               </div>
-            )}
 
-            {dateItems.length > 0 && (
-              <div className={styles.section}>
-                <h3 className={styles.sectionHeading}>By date</h3>
-                <BarList items={dateItems} />
-              </div>
-            )}
-          </div>
+              {dateItems.length > 0 && (
+                <div className={styles.section}>
+                  <h3 className={styles.sectionHeading}>By date</h3>
+                  <BarList items={dateItems} />
+                </div>
+              )}
+            </div>
+          )}
 
           {stats.visits.length > 0 && (
             <div className={styles.section}>
