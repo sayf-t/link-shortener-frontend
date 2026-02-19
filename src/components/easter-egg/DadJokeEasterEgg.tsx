@@ -172,18 +172,30 @@ export default function DadJokeEasterEgg({
                 />
               )}
               {gifUrl && !gifLoading && (
-                <div className={styles.actions}>
-                  <button
-                    type="button"
-                    className={styles.linkButton}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      handleAnotherGif()
-                    }}
-                  >
-                    Another GIF
-                  </button>
-                </div>
+                <>
+                  <div className={styles.actions}>
+                    <button
+                      type="button"
+                      className={styles.linkButton}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleAnotherGif()
+                      }}
+                    >
+                      Another GIF
+                    </button>
+                  </div>
+                  <p className={styles.giphyAttribution}>
+                    <a
+                      href="https://giphy.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.giphyLink}
+                    >
+                      Powered by GIPHY
+                    </a>
+                  </p>
+                </>
               )}
             </div>
           )}

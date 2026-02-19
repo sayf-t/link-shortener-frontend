@@ -140,3 +140,19 @@
   height: auto;
   border-radius: 6px;
 }
+
+.giphyAttribution {
+  margin: 0.75rem 0 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.giphyLink {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.giphyLink:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
